@@ -45,7 +45,7 @@ const password = $('#password').val()
       </div>
     `);
   }
-
+  
 });
 
 
