@@ -12,7 +12,7 @@ $(function () {
 
   
   // SALDO
-  
+    
   let saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
   let totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
 //monto se muestra sin .00 si es entero
