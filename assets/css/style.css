@@ -1,0 +1,54 @@
+/* Estilo General*/
+
+ body {
+      padding: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+     
+      
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    h2{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+   ul {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  
+
+   
+   }
+
+  #alert-container {
+  margin-top: 30px; /* ajusta según necesites */
+}
+
+
+
+#listaContactos span {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  color: #000000c8; /* azul tipo Bootstrap */
+}
+
+
+
+
+
+.card {
+  word-break: break-word;
+}
+
+.card-title {
+  font-size: 0.87rem;
+  line-height: 1.2;
+}
+
+.card p {
+  font-size: 0.60rem;
+}
