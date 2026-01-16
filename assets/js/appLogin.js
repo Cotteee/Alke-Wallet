@@ -31,7 +31,7 @@ const password = $('#password').val()
       setTimeout(() => {
         window.location.href = "menu.html";
       }, 1500);
-//validación incorrecta
+//validación Incorrecta
     } else {
       mostrarAlerta("❌ Email o contraseña incorrectos", "danger");
     }
