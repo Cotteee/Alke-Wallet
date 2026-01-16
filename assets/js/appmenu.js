@@ -84,7 +84,7 @@ if (btnCerrarSesion) {
 // SALDOS Actualizados (MENÚ, NAVBAR Y CARDS)
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-  const saldo = parseFloat(localStorage.getItem("saldo")) || 6000000;
+  const saldo = parseFloat(localStorage.getItem("saldo")) || 600000;
   const totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
   const totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
 
