@@ -1,6 +1,8 @@
 $(function () {
 
+  // ===============================
   // ELEMENTOS DEL DOM
+  // ===============================
   const $listaContactos = $("#listaContactos");
   const $btnGuardarContacto = $("#btnGuardarContacto");
   const $btnEnviar = $("#btnEnviar");
@@ -15,21 +17,32 @@ $(function () {
   const $busquedaContacto = $("#busquedaContacto");
   const $datalist = $("#contactosDatalist");
 
+  const $saldoMenu = $("#saldoMenu");
+  const $saldoNav = $("#saldoNav");
+  const $cardSaldo = $("#cardSaldo");
+  const $cardDepositado = $("#cardDepositado");
+  const $cardEnviado = $("#cardEnviado");
+
   let contactoSeleccionado = null;
 
-  // SALDO
+  // ===============================
+  // SALDOS
+  // ===============================
   let saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
   let totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
+  let totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
 
   $saldoSend.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
+  // ===============================
   // CONTACTOS
+  // ===============================
   let contactos = JSON.parse(localStorage.getItem("contactos")) || [];
   $btnEnviar.hide();
 
+  // ===============================
   // FUNCIONES
-
-  // Guardar movimiento en localStorage
+  // ===============================
   function guardarMovimiento(tipo, monto, detalle) {
     const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
     movimientos.unshift({
@@ -41,9 +54,8 @@ $(function () {
     localStorage.setItem("movimientos", JSON.stringify(movimientos));
   }
 
-  // Mostrar alerta temporal
-  function mostrarAlerta(mensaje, tipo) {
-    $alertContainer
+  function mostrarAlerta(mensaje, tipo, destino = $alertContainer) {
+    destino
       .stop(true, true)
       .html(`
         <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
@@ -54,13 +66,12 @@ $(function () {
       .show();
 
     setTimeout(() => {
-      $alertContainer.find(".alert").fadeOut(1000, function () {
+      destino.find(".alert").fadeOut(1000, function () {
         $(this).remove();
       });
     }, 3000);
   }
 
-  // Renderizar contactos filtrados
   function renderContactosFiltrados() {
     const termino = $busquedaContacto.val().toLowerCase();
     $listaContactos.empty();
@@ -69,7 +80,6 @@ $(function () {
       if (c.nombre.toLowerCase().includes(termino) || c.alias.toLowerCase().includes(termino)) {
         const $li = $("<li>").addClass("list-group-item d-flex justify-content-between align-items-center");
 
-        // Span con emoji 👤
         const $span = $("<span>").css("cursor", "pointer")
           .html(`
             👤 <strong>${c.nombre}</strong><br>
@@ -85,7 +95,6 @@ $(function () {
             $busquedaContacto.val(c.nombre);
           });
 
-        // Botón eliminar con emoji 🗑️
         const $btnEliminar = $("<button>")
           .addClass("btn btn-sm btn-danger")
           .html("🗑️")
@@ -120,7 +129,6 @@ $(function () {
     renderContactosFiltrados();
   }
 
-  // Actualizar datalist para autocompletado
   function actualizarDatalist() {
     $datalist.empty();
     contactos.forEach(c => {
@@ -130,10 +138,24 @@ $(function () {
     });
   }
 
+  function actualizarMenu() {
+    if ($saldoMenu.length) $saldoMenu.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($saldoNav.length) $saldoNav.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardSaldo.length) $cardSaldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardDepositado.length) $cardDepositado.text(totalDepositado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardEnviado.length) $cardEnviado.text(totalEnviado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+  }
+
+  // ===============================
+  // INICIALIZACIÓN
+  // ===============================
   renderContactos();
   actualizarDatalist();
+  actualizarMenu();
 
+  // ===============================
   // EVENTOS
+  // ===============================
 
   // Mostrar formulario de contacto
   $btnAgregarContacto.on("click", function () {
@@ -193,7 +215,7 @@ $(function () {
       return;
     }
 
-    // Actualizar saldo
+    // Actualizar saldo y total enviado
     saldoActual -= monto;
     totalEnviado += monto;
 
@@ -212,6 +234,9 @@ $(function () {
     }, 3000);
 
     $montoEnviar.val("");
+
+    // Actualizar el menú principal
+    actualizarMenu();
   });
 
   // Búsqueda de contactos en tiempo real
@@ -232,3 +257,4 @@ $(function () {
   });
 
 });
+
