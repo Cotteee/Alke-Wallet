@@ -6,7 +6,7 @@ function formatearSaldo(valor) {
   });
 }
 
-
+ 
 //Capturar elementos del DOM
 const mensajeFinal = document.getElementById("mensajeFinal");
 

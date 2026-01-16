@@ -1,6 +1,6 @@
 $(function () {
 
-  // ELEMENTOS
+  // ELEMENTOS 
   
   const $btnDepositar = $("#btnDepositar");
   const $monto = $("#Monto");
