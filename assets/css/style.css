@@ -1,54 +1,86 @@
-/* Estilo General*/
+/* ------------------------------ */
+/* Estilo General sin alterar nada que ya tenías */
+/* ------------------------------ */
 
- body {
-      padding: 20px;
-      font-family: Arial, Helvetica, sans-serif;
-     
-      
-    }
-
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    h2{
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
-
-   ul {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  
-
-   
-   }
-
-  #alert-container {
-  margin-top: 30px; /* ajusta según necesites */
+body {
+    background: linear-gradient(135deg, #d4edda, #28a745); /* Degradado verde */
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Contenedor centrado solo para contenido principal */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: calc(100vh - 56px); /* Resta altura del navbar de Bootstrap */
+    padding: 20px;
+}
 
+/* Mantener tu container interno como antes */
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Encabezados */
+h2 {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Listas de contactos */
+ul {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#alert-container {
+    margin-top: 30px; /* Ajusta según necesites */
+}
 
 #listaContactos span {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  color: #000000c8; /* azul tipo Bootstrap */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    color: #000000c8; /* color de texto */
 }
 
-
-
-
-
+/* Tarjetas */
 .card {
-  word-break: break-word;
+    word-break: break-word;
 }
 
 .card-title {
-  font-size: 0.87rem;
-  line-height: 1.2;
+    font-size: 0.87rem;
+    line-height: 1.2;
 }
 
 .card p {
-  font-size: 0.60rem;
+    font-size: 0.60rem;
+}
+
+#listaContactos .list-group-item {
+    font-family: 'Verdana', sans-serif;
+    font-size: 14px;
+}
+
+/* Tarjetas de movimientos */
+.movimiento-card {
+    margin-bottom: 15px;
+    border-left: 5px solid #198754; 
+}
+
+.movimiento-fecha {
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.movimiento-monto {
+    font-weight: bold;
+}
+
+/* Ajuste de select y contenedor */
+.filtro-container {
+    margin-bottom: 20px;
 }

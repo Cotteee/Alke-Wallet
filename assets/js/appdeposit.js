@@ -119,5 +119,5 @@ $(function () {
   // Inicializar lista completa
   mostrarUltimosMovimientos("todos");
 
-});
+});  
 

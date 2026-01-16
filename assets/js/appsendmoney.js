@@ -1,8 +1,6 @@
 $(function () {
 
-  // ===============================
   // ELEMENTOS DEL DOM
-  // ===============================
   const $listaContactos = $("#listaContactos");
   const $btnGuardarContacto = $("#btnGuardarContacto");
   const $btnEnviar = $("#btnEnviar");
@@ -19,23 +17,17 @@ $(function () {
 
   let contactoSeleccionado = null;
 
-  // ===============================
   // SALDO
-  // ===============================
   let saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
   let totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
 
   $saldoSend.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
-  // ===============================
   // CONTACTOS
-  // ===============================
   let contactos = JSON.parse(localStorage.getItem("contactos")) || [];
   $btnEnviar.hide();
 
-  // ===============================
   // FUNCIONES
-  // ===============================
 
   // Guardar movimiento en localStorage
   function guardarMovimiento(tipo, monto, detalle) {
@@ -47,7 +39,6 @@ $(function () {
       fecha: new Date().toLocaleString()
     });
     localStorage.setItem("movimientos", JSON.stringify(movimientos));
-    // No llamamos mostrarUltimosMovimientos aquí, eso es de transactions.js
   }
 
   // Mostrar alerta temporal
@@ -78,8 +69,14 @@ $(function () {
       if (c.nombre.toLowerCase().includes(termino) || c.alias.toLowerCase().includes(termino)) {
         const $li = $("<li>").addClass("list-group-item d-flex justify-content-between align-items-center");
 
+        // Span con emoji 👤
         const $span = $("<span>").css("cursor", "pointer")
-          .html(`<strong>${c.nombre}</strong> - ${c.alias} (${c.banco})`)
+          .html(`
+            👤 <strong>${c.nombre}</strong><br>
+            Alias: ${c.alias}<br>
+            Cuenta: ${c.cbu}<br>
+            Banco: ${c.banco}
+          `)
           .on("click", function () {
             contactoSeleccionado = i;
             $listaContactos.find("span").removeClass("fw-bold");
@@ -88,9 +85,10 @@ $(function () {
             $busquedaContacto.val(c.nombre);
           });
 
+        // Botón eliminar con emoji 🗑️
         const $btnEliminar = $("<button>")
           .addClass("btn btn-sm btn-danger")
-          .text("Eliminar")
+          .html("🗑️")
           .on("click", function (e) {
             e.stopPropagation();
             if (confirm(`¿Desea eliminar a ${c.nombre}?`)) {
@@ -128,15 +126,14 @@ $(function () {
     contactos.forEach(c => {
       $datalist.append(`<option value="${c.nombre}">`);
       $datalist.append(`<option value="${c.alias}">`);
+      $datalist.append(`<option value="${c.cbu}">`);
     });
   }
 
   renderContactos();
   actualizarDatalist();
 
-  // ===============================
   // EVENTOS
-  // ===============================
 
   // Mostrar formulario de contacto
   $btnAgregarContacto.on("click", function () {
@@ -208,7 +205,7 @@ $(function () {
     // Guardar movimiento en localStorage
     guardarMovimiento("Envío", monto, `Envío a ${contactos[contactoSeleccionado].nombre}`);
 
-    $mensajeEnvio.text("Dinero enviado con éxito ✔").removeClass("text-danger").addClass("text-success");
+    $mensajeEnvio.text("Dinero enviado con éxito 👍").removeClass("text-danger").addClass("text-success");
 
     setTimeout(() => {
       $mensajeEnvio.text("");
@@ -232,6 +229,6 @@ $(function () {
       contactoSeleccionado = null;
       $btnEnviar.hide();
     }
-  });   
+  });
 
 });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +9,15 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  div class="container">
-  <div class="p-3 mb-2 bg-success-subtle text-success-emphasis">
-
+  <!--contenedor-->
+  <div class="container">
+  <div class="p-3 mt-5 bg-success-subtle text-success-emphasis">
+<!--ENCABEZADO-->
     <h2>Enviar Dinero</h2>
     <p>Saldo disponible: $<span id="saldoSend">0</span></p>
 
     <!-- Botón para mostrar formulario -->
-    <button id="btnAgregarContacto" class="btn btn-success mb-2">Agregar nuevo contacto</button>
+    <button id="btnAgregarContacto" class="btn btn-success mb-2">👤➕Agregar nuevo contacto</button>
 
     <!-- Formulario emergente -->
     <div id="formNuevoContacto" style="display:none;">
@@ -27,14 +28,14 @@
       <input type="text" id="alias" placeholder="Alias" class="form-control mb-2">
       <input type="text" id="banco" placeholder="Banco" class="form-control mb-2">
 
-      <button id="btnGuardarContacto" class="btn btn-success mt-2">Guardar contacto</button>
-      <button id="btnCancelarContacto" class="btn btn-danger mt-2">Cancelar</button>
+      <button id="btnGuardarContacto" class="btn btn-success mt-2">✅Guardar contacto</button>
+      <button id="btnCancelarContacto" class="btn btn-danger mt-2">❌Cancelar</button>
     </div>
 <!-- Contenedor de alertas -->
 <div id="alert-container" class="mb-5"></div>
 
 <!-- Campo de búsqueda -->
-<div class="mb-3">
+<div class="mb-1">
     <input type="text" id="busquedaContacto" class="form-control" placeholder="Buscar por nombre o alias">
     <datalist id="contactosDatalist"></datalist>
 </div>
@@ -45,8 +46,8 @@
     <input type="number" id="montoEnviar" placeholder="Monto a enviar" class="form-control mb-2">
     <p id="mensajeEnvio"></p>
 
-    <button type="submit" id="btnEnviar" class="btn btn-success mt-2">Enviar dinero</button>
-    <a href="menu.html" class="btn btn-secondary mt-2">Volver al Menú Principal</a>
+    <button type="submit" id="btnEnviar" class="btn btn-success mt-2">💰Enviar dinero</button>
+    <a href="menu.html" class="btn btn-secondary mt-2">Volver al Menú Principal↩️</a>
 
   </div>
 </div><!-- jQuery CDN (recomendado) --> <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> <!-- Popper (Bootstrap 4 lo necesita para algunos componentes) --> 

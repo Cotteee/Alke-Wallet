@@ -1,4 +1,5 @@
 $(function() {
+  //CAPTURAR ELEMENTOS DEL DOM
   const $listaMovimientos = $("#listaMovimientos");
   const $filtroTipo = $("#filtroTipo");
   const $paginacion = $("<div class='d-flex justify-content-center mt-3' id='paginacion'></div>").insertAfter($listaMovimientos);
@@ -79,8 +80,8 @@ $(function() {
 
     // Crear botones de paginación
     if (totalPaginas > 1) {
-      const $btnPrev = $(`<button class="btn btn-outline-secondary me-2">Anterior</button>`);
-      const $btnNext = $(`<button class="btn btn-outline-secondary ms-2">Siguiente</button>`);
+      const $btnPrev = $(`<button class="btn btn-outline-success me-2">Anterior</button>`);
+      const $btnNext = $(`<button class="btn btn-outline-success ms-2">Siguiente</button>`);
 
       $btnPrev.prop('disabled', paginaActual === 1);
       $btnNext.prop('disabled', paginaActual === totalPaginas);
@@ -103,7 +104,7 @@ $(function() {
   $filtroTipo.on("change", function() {
     paginaActual = 1;
     mostrarUltimosMovimientos($(this).val());
-  });  
+  });
 
   // Guardar movimiento
   window.guardarMovimiento = function(tipo, monto, detalle) {
@@ -117,6 +118,6 @@ $(function() {
     mostrarUltimosMovimientos($filtroTipo.val());
   }
 
-  // Mostrar al cargar
+  // Mostrar al cargar  
   mostrarUltimosMovimientos();
 });
