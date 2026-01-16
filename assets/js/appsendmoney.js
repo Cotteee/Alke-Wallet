@@ -26,11 +26,16 @@ $(function () {
   let contactoSeleccionado = null;
 
   // ===============================
-  // SALDOS
+  // SALDOS (leer desde localStorage siempre)
   // ===============================
-  let saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
-  let totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
-  let totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
+  function cargarSaldos() {
+    saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
+    totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
+    totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
+  }
+
+  let saldoActual, totalEnviado, totalDepositado;
+  cargarSaldos();
 
   $saldoSend.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
@@ -70,6 +75,15 @@ $(function () {
         $(this).remove();
       });
     }, 3000);
+  }
+
+  function actualizarMenu() {
+    cargarSaldos(); // siempre leer el saldo actualizado antes de mostrar
+    if ($saldoMenu.length) $saldoMenu.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($saldoNav.length) $saldoNav.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardSaldo.length) $cardSaldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardDepositado.length) $cardDepositado.text(totalDepositado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardEnviado.length) $cardEnviado.text(totalEnviado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
   }
 
   function renderContactosFiltrados() {
@@ -138,14 +152,6 @@ $(function () {
     });
   }
 
-  function actualizarMenu() {
-    if ($saldoMenu.length) $saldoMenu.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($saldoNav.length) $saldoNav.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($cardSaldo.length) $cardSaldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($cardDepositado.length) $cardDepositado.text(totalDepositado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($cardEnviado.length) $cardEnviado.text(totalEnviado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-  }
-
   // ===============================
   // INICIALIZACIÓN
   // ===============================
@@ -157,18 +163,15 @@ $(function () {
   // EVENTOS
   // ===============================
 
-  // Mostrar formulario de contacto
   $btnAgregarContacto.on("click", function () {
     $formNuevoContacto.show();
   });
 
-  // Cancelar formulario
   $btnCancelarContacto.on("click", function () {
     $formNuevoContacto.hide();
     $("#nombre, #numeroCuenta, #alias, #banco").val("");
   });
 
-  // Guardar nuevo contacto
   $btnGuardarContacto.on("click", function () {
     const nombre = $("#nombre").val().trim();
     const cbu = $("#numeroCuenta").val().trim();
@@ -196,7 +199,9 @@ $(function () {
     mostrarAlerta("✅ Contacto agregado con éxito", "success");
   });
 
+  // ===============================
   // Enviar dinero
+  // ===============================
   $btnEnviar.on("click", function () {
     const monto = parseFloat($montoEnviar.val());
 
@@ -215,31 +220,26 @@ $(function () {
       return;
     }
 
-    // Actualizar saldo y total enviado
+    // actualizar saldo y total enviado
     saldoActual -= monto;
     totalEnviado += monto;
 
+    // guardar en localStorage
     localStorage.setItem("saldo", saldoActual);
     localStorage.setItem("totalEnviado", totalEnviado);
 
     $saldoSend.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
-    // Guardar movimiento en localStorage
     guardarMovimiento("Envío", monto, `Envío a ${contactos[contactoSeleccionado].nombre}`);
 
     $mensajeEnvio.text("Dinero enviado con éxito 👍").removeClass("text-danger").addClass("text-success");
 
-    setTimeout(() => {
-      $mensajeEnvio.text("");
-    }, 3000);
-
+    setTimeout(() => $mensajeEnvio.text(""), 3000);
     $montoEnviar.val("");
 
-    // Actualizar el menú principal
-    actualizarMenu();
+    actualizarMenu(); // sincronizar menú con saldo actualizado
   });
 
-  // Búsqueda de contactos en tiempo real
   $busquedaContacto.on("input", function () {
     renderContactosFiltrados();
 
@@ -257,4 +257,3 @@ $(function () {
   });
 
 });
-
