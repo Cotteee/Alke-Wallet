@@ -232,6 +232,6 @@ $(function () {
       contactoSeleccionado = null;
       $btnEnviar.hide();
     }
-  });
+  });   
 
 });

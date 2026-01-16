@@ -117,6 +117,6 @@ $(function() {
     mostrarUltimosMovimientos($filtroTipo.val());
   }
 
-  // Mostrar al cargar
+  // Mostrar al cargar  
   mostrarUltimosMovimientos();
 });
