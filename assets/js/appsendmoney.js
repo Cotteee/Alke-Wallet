@@ -28,15 +28,32 @@ $(function () {
   // ===============================
   // SALDOS (leer desde localStorage siempre)
   // ===============================
-  function cargarSaldos() {
-    saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
-    totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
-    totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
+  let saldoActual, totalEnviado, totalDepositado;
+
+  function inicializarSaldos() {
+    // Inicializar saldo solo si no existe
+    if (!localStorage.getItem("saldo")) localStorage.setItem("saldo", "600000");
+    if (!localStorage.getItem("totalEnviado")) localStorage.setItem("totalEnviado", "0");
+    if (!localStorage.getItem("totalDepositado")) localStorage.setItem("totalDepositado", "0");
   }
 
-  let saldoActual, totalEnviado, totalDepositado;
-  cargarSaldos();
+  function cargarSaldos() {
+    saldoActual = parseFloat(localStorage.getItem("saldo"));
+    totalEnviado = parseFloat(localStorage.getItem("totalEnviado"));
+    totalDepositado = parseFloat(localStorage.getItem("totalDepositado"));
+  }
 
+  function actualizarMenu() {
+    cargarSaldos(); // leer saldo actualizado antes de mostrar
+    if ($saldoMenu.length) $saldoMenu.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($saldoNav.length) $saldoNav.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardSaldo.length) $cardSaldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardDepositado.length) $cardDepositado.text(totalDepositado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if ($cardEnviado.length) $cardEnviado.text(totalEnviado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+  }
+
+  inicializarSaldos();
+  cargarSaldos();
   $saldoSend.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
   // ===============================
@@ -44,47 +61,6 @@ $(function () {
   // ===============================
   let contactos = JSON.parse(localStorage.getItem("contactos")) || [];
   $btnEnviar.hide();
-
-  // ===============================
-  // FUNCIONES
-  // ===============================
-  function guardarMovimiento(tipo, monto, detalle) {
-    const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
-    movimientos.unshift({
-      tipo,
-      monto,
-      detalle,
-      fecha: new Date().toLocaleString()
-    });
-    localStorage.setItem("movimientos", JSON.stringify(movimientos));
-  }
-
-  function mostrarAlerta(mensaje, tipo, destino = $alertContainer) {
-    destino
-      .stop(true, true)
-      .html(`
-        <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
-          ${mensaje}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      `)
-      .show();
-
-    setTimeout(() => {
-      destino.find(".alert").fadeOut(1000, function () {
-        $(this).remove();
-      });
-    }, 3000);
-  }
-
-  function actualizarMenu() {
-    cargarSaldos(); // siempre leer el saldo actualizado antes de mostrar
-    if ($saldoMenu.length) $saldoMenu.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($saldoNav.length) $saldoNav.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($cardSaldo.length) $cardSaldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($cardDepositado.length) $cardDepositado.text(totalDepositado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    if ($cardEnviado.length) $cardEnviado.text(totalEnviado.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-  }
 
   function renderContactosFiltrados() {
     const termino = $busquedaContacto.val().toLowerCase();
@@ -162,7 +138,6 @@ $(function () {
   // ===============================
   // EVENTOS
   // ===============================
-
   $btnAgregarContacto.on("click", function () {
     $formNuevoContacto.show();
   });
@@ -220,16 +195,17 @@ $(function () {
       return;
     }
 
-    // actualizar saldo y total enviado
+    // Actualizar saldo y total enviado
     saldoActual -= monto;
     totalEnviado += monto;
 
-    // guardar en localStorage
+    // Guardar en localStorage
     localStorage.setItem("saldo", saldoActual);
     localStorage.setItem("totalEnviado", totalEnviado);
 
     $saldoSend.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
+    // Guardar movimiento
     guardarMovimiento("Envío", monto, `Envío a ${contactos[contactoSeleccionado].nombre}`);
 
     $mensajeEnvio.text("Dinero enviado con éxito 👍").removeClass("text-danger").addClass("text-success");
@@ -255,5 +231,37 @@ $(function () {
       $btnEnviar.hide();
     }
   });
+
+  // ===============================
+  // Funciones auxiliares
+  // ===============================
+  function guardarMovimiento(tipo, monto, detalle) {
+    const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
+    movimientos.unshift({
+      tipo,
+      monto,
+      detalle,
+      fecha: new Date().toLocaleString()
+    });
+    localStorage.setItem("movimientos", JSON.stringify(movimientos));
+  }
+
+  function mostrarAlerta(mensaje, tipo, destino = $alertContainer) {
+    destino
+      .stop(true, true)
+      .html(`
+        <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+          ${mensaje}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      `)
+      .show();
+
+    setTimeout(() => {
+      destino.find(".alert").fadeOut(1000, function () {
+        $(this).remove();
+      });
+    }, 3000);
+  }
 
 });

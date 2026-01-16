@@ -1,6 +1,8 @@
 $(function () {
 
+  // ==========================
   // ELEMENTOS
+  // ==========================
   const $btnDepositar = $("#btnDepositar");
   const $monto = $("#Monto");
   const $saldo = $("#saldoActual");
@@ -12,13 +14,12 @@ $(function () {
   // ==========================
   // SALDO
   // ==========================
-  let saldoActual = localStorage.getItem("saldo") !== null 
-                      ? parseFloat(localStorage.getItem("saldo")) 
-                      : 1000;
+  // Inicializar saldo solo si no existe en localStorage
+  if (!localStorage.getItem("saldo")) localStorage.setItem("saldo", "600000");
+  if (!localStorage.getItem("totalDepositado")) localStorage.setItem("totalDepositado", "0");
 
-  let totalDepositado = localStorage.getItem("totalDepositado") !== null 
-                          ? parseFloat(localStorage.getItem("totalDepositado")) 
-                          : 0;
+  let saldoActual = parseFloat(localStorage.getItem("saldo"));
+  let totalDepositado = parseFloat(localStorage.getItem("totalDepositado"));
 
   // Mostrar saldo inicial
   $saldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));

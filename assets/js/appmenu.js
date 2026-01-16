@@ -1,4 +1,8 @@
-// FUNCIÓN PARA FORMATEAR DINERO y no salga .00
+// ===============================
+// FUNCIONES UTILES
+// ===============================
+
+// Formatear dinero sin .00 si es entero
 function formatearSaldo(valor) {
   return Number(valor).toLocaleString("es-CL", {
     minimumFractionDigits: 0,
@@ -6,46 +10,89 @@ function formatearSaldo(valor) {
   });
 }
 
-// Capturar elementos del DOM
+// ===============================
+// INICIALIZAR SALDOS
+// ===============================
+let saldoActual = parseFloat(localStorage.getItem("saldo"));
+let totalDepositado = parseFloat(localStorage.getItem("totalDepositado"));
+let totalEnviado = parseFloat(localStorage.getItem("totalEnviado"));
+
+// Solo inicializamos si no existen
+if (isNaN(saldoActual)) saldoActual = 600000;
+if (isNaN(totalDepositado)) totalDepositado = 0;
+if (isNaN(totalEnviado)) totalEnviado = 0;
+
+// Guardar en localStorage si es la primera vez
+localStorage.setItem("saldo", saldoActual);
+localStorage.setItem("totalDepositado", totalDepositado);
+localStorage.setItem("totalEnviado", totalEnviado);
+
+// ===============================
+// CAPTURAR ELEMENTOS DEL DOM
+// ===============================
 const mensajeFinal = document.getElementById("mensajeFinal");
 
 const btnDepositar = document.getElementById("btnDepositar");
 const btnEnviar = document.getElementById("btnEnviar");
 const btnMovimientos = document.getElementById("btnMovimientos");
 
-// Uso de botones del menú principal
+const navDepositar = document.getElementById("navDepositar");
+const navEnviar = document.getElementById("navEnviar");
+const navMovimientos = document.getElementById("navMovimientos");
+const btnCerrarSesion = document.getElementById("btnCerrarSesion");
+
+// Elementos de saldo en menú, navbar y cards
+const saldoMenu = document.getElementById("saldoMenu");
+const saldoNav = document.getElementById("saldoNav");
+const cardSaldo = document.getElementById("cardSaldo");
+const cardDepositado = document.getElementById("cardDepositado");
+const cardEnviado = document.getElementById("cardEnviado");
+
+// ===============================
+// FUNCIONES PRINCIPALES
+// ===============================
+function actualizarSaldos() {
+  // Leer los valores más recientes de localStorage
+  saldoActual = parseFloat(localStorage.getItem("saldo")) || 0;
+  totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
+  totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
+
+  if (saldoMenu) saldoMenu.textContent = formatearSaldo(saldoActual);
+  if (saldoNav) saldoNav.textContent = formatearSaldo(saldoActual);
+  if (cardSaldo) cardSaldo.textContent = formatearSaldo(saldoActual);
+  if (cardDepositado) cardDepositado.textContent = formatearSaldo(totalDepositado);
+  if (cardEnviado) cardEnviado.textContent = formatearSaldo(totalEnviado);
+}
+
+function mostrarMensajeRedireccion(mensaje, url, delay = 500) {
+  if (mensajeFinal) mensajeFinal.textContent = mensaje;
+  setTimeout(() => window.location.href = url, delay);
+}
+
+// ===============================
+// EVENTOS BOTONES MENÚ PRINCIPAL
+// ===============================
 if (btnDepositar) {
   btnDepositar.addEventListener("click", () => {
-    mensajeFinal.textContent = "Redirigiendo a Depósitos⏳";
-    setTimeout(() => {
-      window.location.href = "deposit.html";
-    }, 500);
+    mostrarMensajeRedireccion("Redirigiendo a Depósitos ⏳", "deposit.html");
   });
 }
 
 if (btnEnviar) {
   btnEnviar.addEventListener("click", () => {
-    mensajeFinal.textContent = "Redirigiendo a Enviar Dinero⏳";
-    setTimeout(() => {
-      window.location.href = "sendmoney.html";
-    }, 500);
+    mostrarMensajeRedireccion("Redirigiendo a Enviar Dinero ⏳", "sendmoney.html");
   });
 }
 
 if (btnMovimientos) {
   btnMovimientos.addEventListener("click", () => {
-    mensajeFinal.textContent = "Redirigiendo a Últimos Movimientos⏳";
-    setTimeout(() => {
-      window.location.href = "transactions.html";
-    }, 500);
+    mostrarMensajeRedireccion("Redirigiendo a Últimos Movimientos ⏳", "transactions.html");
   });
 }
 
-// BOTONES DE LA NAVBAR
-const navDepositar = document.getElementById("navDepositar");
-const navEnviar = document.getElementById("navEnviar");
-const navMovimientos = document.getElementById("navMovimientos");
-
+// ===============================
+// EVENTOS BOTONES NAVBAR
+// ===============================
 if (navDepositar) {
   navDepositar.addEventListener("click", (e) => {
     e.preventDefault();
@@ -68,36 +115,17 @@ if (navMovimientos) {
 }
 
 // ===============================
-// BOTÓN CERRAR SESIÓN
+// CERRAR SESIÓN
 // ===============================
-const btnCerrarSesion = document.getElementById("btnCerrarSesion");
-
 if (btnCerrarSesion) {
-  btnCerrarSesion.addEventListener("click", e => {
+  btnCerrarSesion.addEventListener("click", (e) => {
     e.preventDefault();
-    // Solo redirigir al login, sin borrar datos
+    // Solo redirigir al login, no borramos saldo ni movimientos
     window.location.href = "login.html";
   });
 }
 
 // ===============================
-// SALDOS Actualizados (MENÚ, NAVBAR Y CARDS)
+// ACTUALIZAR SALDOS AL CARGAR PÁGINA
 // ===============================
-document.addEventListener("DOMContentLoaded", () => {
-  const saldo = parseFloat(localStorage.getItem("saldo")) || 600000;
-  const totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
-  const totalEnviado = parseFloat(localStorage.getItem("totalEnviado")) || 0;
-
-  const saldoMenu = document.getElementById("saldoMenu");
-  const saldoNav = document.getElementById("saldoNav");
-  const cardSaldo = document.getElementById("cardSaldo");
-  const cardDepositado = document.getElementById("cardDepositado");
-  const cardEnviado = document.getElementById("cardEnviado");
-
-  if (saldoMenu) saldoMenu.textContent = formatearSaldo(saldo);
-  if (saldoNav) saldoNav.textContent = formatearSaldo(saldo);
-  if (cardSaldo) cardSaldo.textContent = formatearSaldo(saldo);
-
-  if (cardDepositado) cardDepositado.textContent = formatearSaldo(totalDepositado);
-  if (cardEnviado) cardEnviado.textContent = formatearSaldo(totalEnviado);
-});
+document.addEventListener("DOMContentLoaded", actualizarSaldos);
