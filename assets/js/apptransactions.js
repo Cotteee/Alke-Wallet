@@ -103,7 +103,7 @@ $(function() {
   $filtroTipo.on("change", function() {
     paginaActual = 1;
     mostrarUltimosMovimientos($(this).val());
-  });
+  });  
 
   // Guardar movimiento
   window.guardarMovimiento = function(tipo, monto, detalle) {
