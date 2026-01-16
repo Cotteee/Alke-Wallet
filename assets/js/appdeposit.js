@@ -1,7 +1,6 @@
 $(function () {
 
   // ELEMENTOS
-  
   const $btnDepositar = $("#btnDepositar");
   const $monto = $("#Monto");
   const $saldo = $("#saldoActual");
@@ -10,17 +9,23 @@ $(function () {
   const $listaMovimientos = $("#listaMovimientos");
   const $filtroMovimientos = $("#filtroMovimientos");
 
-  
+  // ==========================
   // SALDO
-    
-  let saldoActual = parseFloat(localStorage.getItem("saldo")) || 1000;
-  let totalDepositado = parseFloat(localStorage.getItem("totalDepositado")) || 0;
-//monto se muestra sin .00 si es entero
+  // ==========================
+  let saldoActual = localStorage.getItem("saldo") !== null 
+                      ? parseFloat(localStorage.getItem("saldo")) 
+                      : 1000;
+
+  let totalDepositado = localStorage.getItem("totalDepositado") !== null 
+                          ? parseFloat(localStorage.getItem("totalDepositado")) 
+                          : 0;
+
+  // Mostrar saldo inicial
   $saldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
-  
+  // ==========================
   // FUNCIONES
-  
+  // ==========================
 
   // Guardar movimiento en localStorage
   function guardarMovimiento(tipo, monto, detalle) {
@@ -53,9 +58,31 @@ $(function () {
     }, 3000);
   }
 
-  
-  // EVENTOS
+  // Mostrar últimos movimientos
+  function mostrarUltimosMovimientos(filtro = "todos") {
+    const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
+    $listaMovimientos.empty();
 
+    movimientos.forEach(mov => {
+      if (filtro === "todos" || mov.tipo === filtro) {
+        const $li = $(`
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>${mov.tipo.toUpperCase()}</strong><br>
+              ${mov.detalle}<br>
+              <small class="text-muted">${mov.fecha}</small>
+            </div>
+            <span class="badge bg-success rounded-pill">$${mov.monto.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</span>
+          </li>
+        `);
+        $listaMovimientos.append($li);
+      }
+    });
+  }
+
+  // ==========================
+  // EVENTOS
+  // ==========================
 
   // Depositar dinero
   $btnDepositar.on("click", function(e) {
@@ -79,6 +106,7 @@ $(function () {
     // Actualizar el saldo en la página
     $saldo.text(saldoActual.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
+    // Guardar movimiento
     guardarMovimiento("deposito", montoDepositado, "Depósito en cuenta");
 
     // Alerta de éxito
@@ -102,11 +130,6 @@ $(function () {
 
     $monto.val("");
 
-    // Redirigir después de 2s
-    setTimeout(() => {
-      window.location.href = "menu.html";
-    }, 2000);
-
     // Actualizar lista de movimientos
     mostrarUltimosMovimientos($filtroMovimientos.val());
   });
@@ -119,5 +142,6 @@ $(function () {
   // Inicializar lista completa
   mostrarUltimosMovimientos("todos");
 
-});  
+});
+
 
